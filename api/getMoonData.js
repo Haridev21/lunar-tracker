@@ -12,6 +12,7 @@ export default async function handler(req, res) {
 
     try {
         const url = `${API_BASE_URL}/${encodeURIComponent(location)}?unitGroup=us&key=${API_KEY}&include=days&elements=datetime,moonphase,sunrise,sunset,moonrise,moonset`;
+
         const response = await fetch(url);
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
         const data = await response.json();
