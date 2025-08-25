@@ -2,8 +2,7 @@
 // Contains all moon phase calculation and API functionality
 
 // API Configuration
-const API_KEY = "3SKQTYVMEX3RCQVH5EHFQ2H4P";
-const API_BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline";
+const API_BASE_URL = "/api/weather"; // Using our serverless API endpoint
 
 // Moon Phase Calculation Functions
 function getMoonPhaseName(phase) {
@@ -76,21 +75,28 @@ function formatDate(dateString) {
 
 // API Functions
 async function fetchMoonPhasesData(location) {
-    const url = `${API_BASE_URL}/${encodeURIComponent(location)}?unitGroup=us&key=${API_KEY}&include=days&elements=datetime,moonphase,sunrise,sunset,moonrise,moonset`;
-    
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-        throw new Error(`API Error: ${response.status} - ${response.statusText}`);
-    }
+    try {
+        const response = await fetch(`${API_BASE_URL}?location=${encodeURIComponent(location)}`);
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `API Error: ${response.status} - ${response.statusText}`);
+        }
 
-    const data = await response.json();
-    
-    if (!data.days || data.days.length === 0) {
-        throw new Error('No data received from the API');
-    }
+        const data = await response.json();
+        
+        if (!data.days || data.days.length === 0) {
+            throw new Error('No moon phase data received from the API');
+        }
 
-    return data.days.slice(0, 8); // Return first 8 days (today + next 7)
+        return data.days.slice(0, 8); // Return first 8 days (today + next 7)
+    } catch (error) {
+        // Provide more user-friendly error messages
+        if (error.message.includes('Failed to fetch')) {
+            throw new Error('Unable to connect to the server. Please check your internet connection and try again.');
+        }
+        throw error;
+    }
 }
 
 // Export functions for use in other modules
