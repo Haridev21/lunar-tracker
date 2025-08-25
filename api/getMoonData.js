@@ -1,10 +1,11 @@
 // /api/getMoonData.js
 // Vercel Serverless Function
+
 import fetch from "node-fetch";
 
 export default async function handler(req, res) {
     const { location } = req.query;
-    const API_KEY = process.env.VC_API_KEY; // Vercel environment variable
+    const API_KEY = process.env.VC_API_KEY; // Set this in Vercel environment variables
     const API_BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline";
 
     if (!location) return res.status(400).json({ error: "Location is required" });
