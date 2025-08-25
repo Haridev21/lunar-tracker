@@ -2,7 +2,9 @@
 // Contains all moon phase calculation and API functionality
 
 // API Configuration
-const API_KEY = "3SKQTYVMEX3RCQVH5EHFQ2H4P";
+//const API_KEY = "3SKQTYVMEX3RCQVH5EHFQ2H4P";
+const API_KEY = process.env.VC_API_KEY;
+
 const API_BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline";
 
 // Moon Phase Calculation Functions
