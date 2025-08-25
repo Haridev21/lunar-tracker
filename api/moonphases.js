@@ -57,10 +57,10 @@ async function fetchMoonPhasesData(location) {
     if (!response.ok) throw new Error(`API Error: ${response.status} - ${response.statusText}`);
     const data = await response.json();
     if (!data.days || data.days.length === 0) throw new Error('No data received from API');
-    return data.days.slice(0,8);
+    return data.days.slice(0, 8); // today + next 7 days
 }
 
-// Export
+// Expose for global use
 window.MoonPhaseAPI = {
     getMoonPhaseName,
     getMoonPhaseDescription,
