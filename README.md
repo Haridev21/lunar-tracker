@@ -17,9 +17,3 @@ Built with **HTML, CSS, and JavaScript**, powered by the **Visual Crossing Weath
 
 ---
 
-## 🚀 Getting Started
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/your-username/lunar-tracker.git
-cd lunar-tracker
