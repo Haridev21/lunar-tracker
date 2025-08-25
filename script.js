@@ -126,7 +126,15 @@ function showError(message) {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+    // Trigger fetch on Enter key
     document.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') fetchMoonPhases();
     });
+
+    // Trigger fetch on Search button click
+    const fetchBtn = document.getElementById('fetchBtn');
+    if (fetchBtn) {
+        fetchBtn.addEventListener('click', fetchMoonPhases);
+    }
 });
+
