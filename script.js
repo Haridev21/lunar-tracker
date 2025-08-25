@@ -25,8 +25,12 @@ async function fetchMoonPhases() {
     fetchBtn.disabled = true;
 
     try {
-        // Use API module to fetch data
-        fullMoonData = await MoonPhaseAPI.fetchMoonPhasesData(location);
+        // Fetch from Vercel serverless API
+        const response = await fetch(`/api/getMoonData?location=${encodeURIComponent(location)}`);
+        if (!response.ok) throw new Error('Failed to fetch moon data');
+        const data = await response.json();
+
+        fullMoonData = data.days.slice(0, 8); // today + next 7 days
         
         // Initially show only today's moon phase
         displayMoonPhases([fullMoonData[0]], true);
