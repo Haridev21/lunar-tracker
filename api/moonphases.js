@@ -1,7 +1,7 @@
 // Moon Phase API Module
 // Contains all moon phase calculation and API functionality
 
-// API Configuration
+// API Configuration - Using Vercel environment variable
 const API_BASE_URL = "/api/weather"; // Using our serverless API endpoint
 
 // Moon Phase Calculation Functions
