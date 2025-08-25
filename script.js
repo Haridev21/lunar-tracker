@@ -1,11 +1,24 @@
 // Main Application Script
 // Handles UI interactions and orchestrates the application
 
+// Wait until MoonPhaseAPI is available
+function waitForMoonPhaseAPI() {
+    return new Promise((resolve) => {
+        const interval = setInterval(() => {
+            if (window.MoonPhaseAPI) {
+                clearInterval(interval);
+                resolve(window.MoonPhaseAPI);
+            }
+        }, 50);
+    });
+}
+
 // Global state
 let fullMoonData = [];
 
 // Main Functions
 async function fetchMoonPhases() {
+    const MoonPhaseAPI = await waitForMoonPhaseAPI();
     const location = document.getElementById('location').value.trim();
 
     if (!location) {
@@ -18,7 +31,6 @@ async function fetchMoonPhases() {
     const moonPhasesEl = document.getElementById('moonPhases');
     const fetchBtn = document.getElementById('fetchBtn');
 
-    // Show loading state
     loadingEl.style.display = 'flex';
     errorEl.style.display = 'none';
     moonPhasesEl.innerHTML = '';
@@ -28,16 +40,15 @@ async function fetchMoonPhases() {
         // Fetch from Vercel serverless API
         const response = await fetch(`/api/getMoonData?location=${encodeURIComponent(location)}`);
         if (!response.ok) throw new Error('Failed to fetch moon data');
-        const data = await response.json();
 
+        const data = await response.json();
         fullMoonData = data.days.slice(0, 8); // today + next 7 days
-        
-        // Initially show only today's moon phase
-        displayMoonPhases([fullMoonData[0]], true);
-        
-        // Show the "Show Next 7 Days" button
+
+        // Show only today's moon phase initially
+        displayMoonPhases([fullMoonData[0]], true, MoonPhaseAPI);
+
         document.getElementById('showMoreContainer').style.display = 'block';
-        
+
     } catch (error) {
         showError(`Error fetching data: ${error.message}`);
     } finally {
@@ -46,7 +57,7 @@ async function fetchMoonPhases() {
     }
 }
 
-function displayMoonPhases(days, showingCurrentOnly = false) {
+function displayMoonPhases(days, showingCurrentOnly = false, MoonPhaseAPI) {
     const moonPhasesEl = document.getElementById('moonPhases');
     moonPhasesEl.innerHTML = '';
 
@@ -70,7 +81,7 @@ function displayMoonPhases(days, showingCurrentOnly = false) {
                     ${(moonPhase * 100).toFixed(0)}%
                 </div>
             </div>
-            
+
             <div class="moon-display">
                 <div class="moon-container">
                     <div class="moon-visual">
@@ -83,7 +94,7 @@ function displayMoonPhases(days, showingCurrentOnly = false) {
                     <p class="phase-description">${phaseDescription}</p>
                 </div>
             </div>
-            
+
             <div class="card-footer">
                 <div class="time-info">
                     <div class="time-item">
@@ -103,10 +114,7 @@ function displayMoonPhases(days, showingCurrentOnly = false) {
 }
 
 function showNext7Days() {
-    // Show all 8 days (today + next 7)
-    displayMoonPhases(fullMoonData);
-    
-    // Hide the "Show Next 7 Days" button
+    waitForMoonPhaseAPI().then(MoonPhaseAPI => displayMoonPhases(fullMoonData, false, MoonPhaseAPI));
     document.getElementById('showMoreContainer').style.display = 'none';
 }
 
@@ -117,11 +125,8 @@ function showError(message) {
 }
 
 // Event Listeners
-document.addEventListener('DOMContentLoaded', function() {
-    // Allow Enter key to trigger fetch
-    document.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            fetchMoonPhases();
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') fetchMoonPhases();
     });
 });
