@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional lunar phase tracker with real-time data and beautiful visualizations">
+    <meta name="keywords" content="moon phases, lunar tracker, astronomy, weather API">
+    <meta name="author" content="Lunar Tracker">
+    <meta name="theme-color" content="#0ea5e9">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lunar-tracker.com/">
+    <meta property="og:title" content="Lunar Tracker - Professional Moon Phase Tracker">
+    <meta property="og:description" content="Discover the cosmic rhythm of the moon with our professional lunar phase tracker">
+    <meta property="og:image" content="https://lunar-tracker.com/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://lunar-tracker.com/">
+    <meta property="twitter:title" content="Lunar Tracker - Professional Moon Phase Tracker">
+    <meta property="twitter:description" content="Discover the cosmic rhythm of the moon with our professional lunar phase tracker">
+    <meta property="twitter:image" content="https://lunar-tracker.com/og-image.jpg">
+    
+    <title>Lunar Tracker - Professional Moon Phase Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="header" role="banner">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon" aria-hidden="true">🌙</div>
+                    <h1>Lunar Tracker</h1>
+                </div>
+                <p class="tagline">Discover the cosmic rhythm of the moon</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content" role="main">
+            <!-- Search Section -->
+            <section class="search-section" aria-labelledby="search-heading">
+                <div class="search-container">
+                    <h2 id="search-heading" class="sr-only">Search for Moon Phases</h2>
+                    <div class="search-box">
+                        <div class="search-icon" aria-hidden="true">📍</div>
+                        <label for="location" class="sr-only">Enter your location</label>
+                        <input 
+                            type="text" 
+                            id="location" 
+                            name="location"
+                            placeholder="Enter your location..." 
+                            value="New York, NY"
+                            aria-describedby="search-hint"
+                            autocomplete="off"
+                        >
+                        <button 
+                            onclick="fetchMoonPhases()" 
+                            id="fetchBtn" 
+                            class="search-btn"
+                            type="button"
+                            aria-label="Search for moon phases"
+                        >
+                            <span>Search</span>
+                            <div class="btn-icon" aria-hidden="true">🔍</div>
+                        </button>
+                    </div>
+                    <p id="search-hint" class="search-hint">Type any city, state, or country to get started</p>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <div id="loading" class="loading-container" style="display: none;" role="status" aria-live="polite">
+                <div class="loading-spinner" aria-hidden="true"></div>
+                <p>Fetching lunar data...</p>
+            </div>
+
+            <!-- Error Display -->
+            <div id="error" class="error-container" style="display: none;" role="alert" aria-live="assertive"></div>
+
+            <!-- Moon Phases Display -->
+            <section id="moonPhases" class="moon-phases-section" aria-label="Moon Phase Results"></section>
+            
+            <!-- Show More Button -->
+            <div id="showMoreContainer" class="show-more-container" style="display: none;">
+                <button 
+                    onclick="showNext7Days()" 
+                    id="showMoreBtn" 
+                    class="show-more-btn"
+                    type="button"
+                    aria-label="View 7-day forecast"
+                >
+                    <span>View 7-Day Forecast</span>
+                    <div class="btn-arrow" aria-hidden="true">→</div>
+                </button>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer" role="contentinfo">
+            <div class="footer-content">
+                <p>&copy; 2024 Lunar Tracker. Powered by Visual Crossing Weather API</p>
+                <p class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <span class="separator">•</span>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <span class="separator">•</span>
+                    <a href="#" class="footer-link">API Documentation</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Screen Reader Only Class -->
+    <style>
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+
+    <script src="api/moonphases.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
